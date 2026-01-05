@@ -1,0 +1,254 @@
+[gd_scene load_steps=19 format=3 uid="uid://cjk4kxrkd51g5"]
+
+[ext_resource type="Shader" uid="uid://p7x8psciedbc" path="res://scripts/shaders/smoky.gdshader" id="1_1d3j5"]
+[ext_resource type="Script" uid="uid://pg3lrtcn3iuv" path="res://scripts/core/card.gd" id="1_c5vhu"]
+[ext_resource type="Texture2D" uid="uid://cyphtj2knmihd" path="res://assets/Card/Icons/BalanceIcon.png" id="2_c5vhu"]
+[ext_resource type="Script" uid="uid://nwki54hp1g77" path="res://scripts/core/CardDefinition.gd" id="2_rrr6a"]
+[ext_resource type="Texture2D" uid="uid://rienu1dqotr6" path="res://assets/Card/Images/healBIG.png" id="3_rrr6a"]
+[ext_resource type="FontFile" uid="uid://bnd6fpxmrh3xk" path="res://assets/fonts/Oswald-Bold.ttf" id="4_2bh4c"]
+[ext_resource type="FontFile" uid="uid://b6o8kshd0tc7a" path="res://assets/fonts/Oswald-SemiBold.ttf" id="7_t6tvt"]
+
+[sub_resource type="Resource" id="Resource_q7le6"]
+script = ExtResource("2_rrr6a")
+metadata/_custom_type_script = "uid://nwki54hp1g77"
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q7le6"]
+bg_color = Color(0, 0, 0, 0.32156864)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2bh4c"]
+shader = ExtResource("1_1d3j5")
+shader_parameter/base_color = Color(0.7372549, 0.5764706, 0, 1)
+shader_parameter/smoke_color = Color(0.14901961, 0.105882354, 0, 1)
+shader_parameter/speed = 0.142000006745
+shader_parameter/density = 0.9200000437
+shader_parameter/softness = 0.7750000368125
+shader_parameter/time_offset = 10.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t6tvt"]
+bg_color = Color(0.73872274, 0.57656753, 0, 1)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pemn0"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8nsiv"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_right = 20
+corner_radius_bottom_left = 20
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_elkw6"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xg7vj"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ifb72"]
+bg_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 20
+corner_radius_bottom_right = 20
+
+[sub_resource type="FontFile" id="FontFile_utd6n"]
+subpixel_positioning = 2
+msdf_pixel_range = 4
+msdf_size = 32
+cache/0/16/0/ascent = 0.0
+cache/0/16/0/descent = 0.0
+cache/0/16/0/underline_position = 0.0
+cache/0/16/0/underline_thickness = 0.0
+cache/0/16/0/scale = 1.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_iuiyl"]
+size = Vector2(500, 700)
+
+[node name="card" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_c5vhu")
+definition = SubResource("Resource_q7le6")
+
+[node name="Shadow" type="Panel" parent="."]
+custom_minimum_size = Vector2(500, 700)
+layout_mode = 0
+offset_left = -206.0
+offset_top = -305.0
+offset_right = 294.0
+offset_bottom = 395.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_q7le6")
+
+[node name="SuitColor" type="Panel" parent="."]
+material = SubResource("ShaderMaterial_2bh4c")
+custom_minimum_size = Vector2(500, 700)
+layout_mode = 0
+offset_left = -251.0
+offset_top = -352.0
+offset_right = 249.0
+offset_bottom = 348.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_t6tvt")
+
+[node name="CardFrame" type="Panel" parent="."]
+custom_minimum_size = Vector2(500, 700)
+layout_mode = 0
+offset_left = -251.0
+offset_top = -351.0
+offset_right = 249.0
+offset_bottom = 349.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_pemn0")
+
+[node name="Title_ValueFrame" type="Panel" parent="."]
+custom_minimum_size = Vector2(460, 100)
+layout_mode = 0
+offset_left = -233.0
+offset_top = -328.0
+offset_right = 227.0
+offset_bottom = -228.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_8nsiv")
+
+[node name="CardData" type="HBoxContainer" parent="Title_ValueFrame"]
+layout_mode = 0
+offset_left = 24.0
+offset_top = 15.0
+offset_right = 433.0
+offset_bottom = 85.0
+
+[node name="Title" type="Label" parent="Title_ValueFrame/CardData"]
+texture_filter = 2
+custom_minimum_size = Vector2(222, 30)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("4_2bh4c")
+theme_override_font_sizes/font_size = 40
+text = "Title"
+
+[node name="HSeparator" type="HSeparator" parent="Title_ValueFrame/CardData"]
+custom_minimum_size = Vector2(127, 4)
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_elkw6")
+
+[node name="Value" type="Label" parent="Title_ValueFrame/CardData"]
+texture_filter = 2
+custom_minimum_size = Vector2(25, 30)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("4_2bh4c")
+theme_override_font_sizes/font_size = 40
+text = "##"
+
+[node name="BalanceCardData" type="HBoxContainer" parent="Title_ValueFrame"]
+visible = false
+layout_mode = 0
+offset_left = 24.0
+offset_top = 15.0
+offset_right = 433.0
+offset_bottom = 85.0
+
+[node name="Title" type="Label" parent="Title_ValueFrame/BalanceCardData"]
+texture_filter = 2
+custom_minimum_size = Vector2(222, 30)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 40
+text = "Balance"
+
+[node name="HSeparator" type="HSeparator" parent="Title_ValueFrame/BalanceCardData"]
+custom_minimum_size = Vector2(127, 4)
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_elkw6")
+
+[node name="BalanceIcon" type="Sprite2D" parent="Title_ValueFrame/BalanceCardData"]
+modulate = Color(0, 0, 0, 1)
+texture_filter = 1
+position = Vector2(383, 31)
+texture = ExtResource("2_c5vhu")
+
+[node name="IMAGE" type="Sprite2D" parent="."]
+position = Vector2(-6.0000005, -70)
+scale = Vector2(0.91390765, 0.9139075)
+texture = ExtResource("3_rrr6a")
+
+[node name="DescriptionFrame" type="Panel" parent="."]
+custom_minimum_size = Vector2(460, 250)
+layout_mode = 0
+offset_left = -231.0
+offset_top = 80.0
+offset_right = 229.0
+offset_bottom = 330.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_xg7vj")
+
+[node name="Description" type="Label" parent="DescriptionFrame"]
+texture_filter = 2
+custom_minimum_size = Vector2(405, 211)
+layout_mode = 0
+offset_left = 25.0
+offset_top = 19.0
+offset_right = 430.0
+offset_bottom = 230.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("7_t6tvt")
+theme_override_font_sizes/font_size = 25
+text = "For the next 3 rounds, at the end of the round, remove 4 points from your opponent's Health total."
+horizontal_alignment = 3
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="EffectTag" type="Panel" parent="DescriptionFrame"]
+visible = false
+layout_mode = 0
+offset_right = 201.0
+offset_bottom = 39.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ifb72")
+
+[node name="EffectLabel" type="Label" parent="DescriptionFrame/EffectTag"]
+texture_filter = 1
+custom_minimum_size = Vector2(200, 40)
+layout_mode = 0
+offset_right = 201.0
+offset_bottom = 40.0
+theme_override_fonts/font = SubResource("FontFile_utd6n")
+text = "Persistent Effect"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("RectangleShape2D_iuiyl")
