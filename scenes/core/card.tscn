@@ -4,8 +4,8 @@
 [ext_resource type="Script" uid="uid://pg3lrtcn3iuv" path="res://scripts/core/card.gd" id="1_c5vhu"]
 [ext_resource type="Texture2D" uid="uid://cyphtj2knmihd" path="res://assets/Card/Icons/BalanceIcon.png" id="2_c5vhu"]
 [ext_resource type="Script" uid="uid://nwki54hp1g77" path="res://scripts/core/CardDefinition.gd" id="2_rrr6a"]
-[ext_resource type="Texture2D" uid="uid://rienu1dqotr6" path="res://assets/Card/Images/healBIG.png" id="3_rrr6a"]
 [ext_resource type="FontFile" uid="uid://bnd6fpxmrh3xk" path="res://assets/fonts/Oswald-Bold.ttf" id="4_2bh4c"]
+[ext_resource type="Texture2D" uid="uid://wgdsthw5el1o" path="res://assets/Card/Images/healSMALL.png" id="6_2bh4c"]
 [ext_resource type="FontFile" uid="uid://b6o8kshd0tc7a" path="res://assets/fonts/Oswald-SemiBold.ttf" id="7_t6tvt"]
 
 [sub_resource type="Resource" id="Resource_q7le6"]
@@ -46,7 +46,7 @@ border_width_left = 5
 border_width_top = 5
 border_width_right = 5
 border_width_bottom = 5
-border_color = Color(0, 0, 0, 1)
+border_color = Color(0.9779369, 0.97793704, 0.9779369, 1)
 corner_radius_top_left = 20
 corner_radius_top_right = 20
 corner_radius_bottom_right = 20
@@ -58,7 +58,7 @@ border_width_left = 5
 border_width_top = 5
 border_width_right = 5
 border_width_bottom = 5
-border_color = Color(0, 0, 0, 1)
+border_color = Color(1, 1, 1, 1)
 corner_radius_top_right = 20
 corner_radius_bottom_left = 20
 
@@ -70,14 +70,14 @@ border_width_left = 5
 border_width_top = 5
 border_width_right = 5
 border_width_bottom = 5
-border_color = Color(0, 0, 0, 1)
+border_color = Color(1, 1, 1, 1)
 corner_radius_top_left = 20
 corner_radius_top_right = 20
 corner_radius_bottom_right = 20
 corner_radius_bottom_left = 20
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ifb72"]
-bg_color = Color(0, 0, 0, 1)
+bg_color = Color(1, 1, 1, 1)
 corner_radius_top_left = 20
 corner_radius_bottom_right = 20
 
@@ -152,7 +152,7 @@ offset_bottom = 85.0
 texture_filter = 2
 custom_minimum_size = Vector2(222, 30)
 layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_fonts/font = ExtResource("4_2bh4c")
 theme_override_font_sizes/font_size = 40
 text = "Title"
@@ -166,7 +166,7 @@ theme_override_styles/separator = SubResource("StyleBoxEmpty_elkw6")
 texture_filter = 2
 custom_minimum_size = Vector2(25, 30)
 layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_fonts/font = ExtResource("4_2bh4c")
 theme_override_font_sizes/font_size = 40
 text = "##"
@@ -183,7 +183,7 @@ offset_bottom = 85.0
 texture_filter = 2
 custom_minimum_size = Vector2(222, 30)
 layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(0.9867516, 0.9867516, 0.9867516, 1)
 theme_override_font_sizes/font_size = 40
 text = "Balance"
 
@@ -193,15 +193,34 @@ layout_mode = 2
 theme_override_styles/separator = SubResource("StyleBoxEmpty_elkw6")
 
 [node name="BalanceIcon" type="Sprite2D" parent="Title_ValueFrame/BalanceCardData"]
-modulate = Color(0, 0, 0, 1)
 texture_filter = 1
 position = Vector2(383, 31)
 texture = ExtResource("2_c5vhu")
 
-[node name="IMAGE" type="Sprite2D" parent="."]
-position = Vector2(-6.0000005, -70)
-scale = Vector2(0.91390765, 0.9139075)
-texture = ExtResource("3_rrr6a")
+[node name="THUMBvalue" type="Label" parent="."]
+layout_mode = 0
+offset_left = -238.0
+offset_top = -336.0
+offset_right = 243.0
+offset_bottom = 332.0
+theme_override_colors/font_color = Color(0.14901961, 0.105882354, 0, 0.24313726)
+theme_override_fonts/font = ExtResource("4_2bh4c")
+theme_override_font_sizes/font_size = 450
+text = "##"
+
+[node name="imageSlot" type="ColorRect" parent="."]
+z_index = 2
+custom_minimum_size = Vector2(460, 460)
+layout_mode = 0
+offset_left = -238.0
+offset_top = -303.0
+offset_right = 222.0
+offset_bottom = 157.0
+color = Color(1, 1, 1, 0)
+
+[node name="IMAGE" type="Sprite2D" parent="imageSlot"]
+position = Vector2(224, 213)
+texture = ExtResource("6_2bh4c")
 
 [node name="DescriptionFrame" type="Panel" parent="."]
 custom_minimum_size = Vector2(460, 250)
@@ -221,7 +240,7 @@ offset_left = 25.0
 offset_top = 19.0
 offset_right = 430.0
 offset_bottom = 230.0
-theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_fonts/font = ExtResource("7_t6tvt")
 theme_override_font_sizes/font_size = 25
 text = "For the next 3 rounds, at the end of the round, remove 4 points from your opponent's Health total."
@@ -243,6 +262,7 @@ custom_minimum_size = Vector2(200, 40)
 layout_mode = 0
 offset_right = 201.0
 offset_bottom = 40.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = SubResource("FontFile_utd6n")
 text = "Persistent Effect"
 horizontal_alignment = 1

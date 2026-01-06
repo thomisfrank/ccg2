@@ -70,11 +70,11 @@ func get_description() -> String:
 		Kind.DISCARD:
 			return "Discard the top %d cards from your opponent’s deck." % count
 		Kind.REGENERATE:
-			return "Persistent Effect. For the next %d rounds, at the end of the round, add %d points to your Health total." % [duration_rounds, amount]
+			return "For the next %d rounds, at the end of the round, add %d points to your Health total." % [duration_rounds, amount]
 		Kind.BLEED:
-			return "Persistent Effect. For the next %d rounds, at the end of the round, remove %d points from your opponent’s Health total." % [duration_rounds, amount]
+			return "For the next %d rounds, at the end of the round, remove %d points from your opponent’s Health total." % [duration_rounds, amount]
 		Kind.REPLENISH:
-			return "Persistent Effect. For the next %d rounds, at the end of the round, choose %d card from your discard pile. Shuffle it into your deck." % [duration_rounds, max(1, count)]
+			return "For the next %d rounds, at the end of the round, choose %d card from your discard pile. Shuffle it into your deck." % [duration_rounds, max(1, count)]
 		Kind.BALANCE:
 			return "If your opponent’s Health is higher, deal damage equal to the difference. If your Health is lower, restore Health equal to the difference."
 		_:

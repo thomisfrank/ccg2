@@ -9,16 +9,19 @@ extends Control
 @onready var _balance_row: HBoxContainer = $"Title_ValueFrame/BalanceCardData"
 @onready var _standard_row: HBoxContainer = $"Title_ValueFrame/CardData"
 @onready var _description_label: Label = $"DescriptionFrame/Description"
-@onready var _image_sprite: Sprite2D = $"IMAGE"
+@onready var _image_slot: ColorRect = get_node_or_null("imageSlot") as ColorRect
+@onready var _image_sprite: Sprite2D = get_node_or_null("imageSlot/IMAGE") as Sprite2D
 @onready var _balance_icon: Sprite2D = $"Title_ValueFrame/BalanceCardData/BalanceIcon"
 @onready var _effect_tag: Panel = $"DescriptionFrame/EffectTag"
 @onready var _effect_label: Label = $"DescriptionFrame/EffectTag/EffectLabel"
+@onready var _thumb_value_label: Label = $"THUMBvalue"
 @onready var _area: Area2D = $"Area2D"
 @onready var _title_frame: Panel = $"Title_ValueFrame"
 @onready var _description_frame: Panel = $"DescriptionFrame"
 @onready var _shadow: Panel = $"Shadow"
 
 var _image_target_size: Vector2
+@export var image_target_size: Vector2 = Vector2.ZERO
 const BALANCE_ICON: Texture2D = preload("res://assets/Card/Icons/BalanceIcon.png")
 
 @export var thumbnail_scale: float = 0.5
@@ -30,11 +33,15 @@ static var _hover_owner: Node = null
 
 
 func _ready() -> void:
+	if _image_sprite == null:
+		_image_sprite = get_node_or_null("IMAGE") as Sprite2D
 	_ensure_unique_shader()
 	_cache_image_target_size()
 	_base_z_index = z_index
 	_shadow.z_as_relative = false
 	_shadow.z_index = _base_z_index
+	if _image_slot != null:
+		_image_slot.clip_contents = true
 	if definition == null:
 		_apply_thumbnail_mode()
 	else:
@@ -56,7 +63,16 @@ func apply_definition(defn: CardDefinition) -> void:
 	_title_label.text = title_text
 	_balance_title_label.text = title_text
 	_value_label.text = _get_value_text(defn)
+	_thumb_value_label.text = _get_thumb_value_text(defn)
 	_description_label.text = defn.get_description()
+	if defn.kind == CardDefinition.Kind.REGENERATE:
+		_title_label.add_theme_color_override("font_color", Color(0, 0, 0, 1))
+		_value_label.add_theme_color_override("font_color", Color(0, 0, 0, 1))
+		_description_label.add_theme_color_override("font_color", Color(0, 0, 0, 1))
+	else:
+		_title_label.remove_theme_color_override("font_color")
+		_value_label.remove_theme_color_override("font_color")
+		_description_label.remove_theme_color_override("font_color")
 
 	var icon_texture := defn.get_icon()
 	if icon_texture != null:
@@ -79,6 +95,9 @@ func _apply_suit_colors(suit_value: String) -> void:
 	if panel_material is ShaderMaterial:
 		panel_material.set_shader_parameter("base_color", colors["a"])
 		panel_material.set_shader_parameter("smoke_color", colors["b"])
+	var thumb_color: Color = colors["b"]
+	thumb_color.a = 62.0 / 255.0
+	_thumb_value_label.add_theme_color_override("font_color", thumb_color)
 
 
 func _get_value_text(defn: CardDefinition) -> String:
@@ -89,6 +108,16 @@ func _get_value_text(defn: CardDefinition) -> String:
 			return ""
 		_:
 			return str(defn.amount)
+
+
+func _get_thumb_value_text(defn: CardDefinition) -> String:
+	match defn.kind:
+		CardDefinition.Kind.BALANCE:
+			return ""
+		CardDefinition.Kind.DISCARD, CardDefinition.Kind.REPLENISH:
+			return "%02d" % defn.count
+		_:
+			return "%02d" % defn.amount
 
 
 func _apply_effect_tag(special_value: String) -> void:
@@ -114,6 +143,15 @@ func _ensure_unique_shader() -> void:
 
 
 func _cache_image_target_size() -> void:
+	if image_target_size != Vector2.ZERO:
+		_image_target_size = image_target_size
+		return
+	if _image_slot != null:
+		var slot_size := _image_slot.size
+		if slot_size == Vector2.ZERO:
+			slot_size = _image_slot.custom_minimum_size
+		_image_target_size = slot_size
+		return
 	if _image_sprite.texture == null:
 		_image_target_size = Vector2.ZERO
 		return
@@ -131,17 +169,22 @@ func _set_image_texture(texture: Texture2D) -> void:
 
 func _fit_image_to_target() -> void:
 	if _image_target_size == Vector2.ZERO:
-		return
+		_cache_image_target_size()
+		if _image_target_size == Vector2.ZERO:
+			return
 	var texture := _image_sprite.texture
 	if texture == null:
 		return
 	var texture_size := texture.get_size()
 	if texture_size.x == 0 or texture_size.y == 0:
 		return
-	_image_sprite.scale = Vector2(
+	var scale_factor: float = max(
 		_image_target_size.x / texture_size.x,
 		_image_target_size.y / texture_size.y
 	)
+	_image_sprite.scale = Vector2.ONE * scale_factor
+	if _image_slot != null:
+		_image_sprite.position = _image_target_size * 0.5
 
 
 func _apply_text_scale_from_parent() -> void:
@@ -157,6 +200,7 @@ func _apply_text_scale_from_parent() -> void:
 
 func _apply_thumbnail_mode() -> void:
 	scale = Vector2(thumbnail_scale, thumbnail_scale)
+	_thumb_value_label.visible = true
 	_title_frame.visible = false
 	_description_frame.visible = false
 	z_index = _base_z_index
@@ -164,6 +208,7 @@ func _apply_thumbnail_mode() -> void:
 
 func _apply_zoom_mode() -> void:
 	scale = Vector2(zoom_scale, zoom_scale)
+	_thumb_value_label.visible = false
 	_title_frame.visible = true
 	_description_frame.visible = true
 	z_index = hover_z_index
