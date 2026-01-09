@@ -5,6 +5,7 @@ signal effect_resolving(effect_id: String)
 signal effect_resolved(effect_id: String)
 signal effect_expired(effect_id: String)
 signal damage_applied(amount: int, target_is_opponent: bool)
+signal heal_applied(amount: int, target_is_opponent: bool)
 
 enum EffectState { QUEUED, RESOLVING, RESOLVED, EXPIRED, CANCELLED }
 
@@ -23,10 +24,13 @@ func _wire_debug_health() -> void:
 	var player_bar := root.find_child("HealthBar", true, false)
 	if damage_applied.is_connected(_on_damage_applied):
 		damage_applied.disconnect(_on_damage_applied)
+	if heal_applied.is_connected(_on_heal_applied):
+		heal_applied.disconnect(_on_heal_applied)
 	if opp_bar == null and player_bar == null:
 		print("DEBUG effects: no health bars found for debug wiring")
 		return
 	damage_applied.connect(_on_damage_applied)
+	heal_applied.connect(_on_heal_applied)
 	print("DEBUG effects: damage routing active (player_bar=", player_bar, " opp_bar=", opp_bar, ")")
 
 func register_effect(effect_data: Dictionary) -> String:
@@ -105,6 +109,8 @@ func _apply_effect(effect_id: String) -> void:
 	var kind = effect_data.get("kind", null)
 	if _is_kind_damage(kind):
 		_apply_damage(effect_data)
+	elif _is_kind_heal(kind):
+		_apply_heal(effect_data)
 
 func _is_kind_damage(kind) -> bool:
 	# Handle enum kinds from CardDefinition and string fallbacks
@@ -113,12 +119,26 @@ func _is_kind_damage(kind) -> bool:
 	return str(kind).to_lower() == "damage"
 
 
+func _is_kind_heal(kind) -> bool:
+	if typeof(kind) == TYPE_INT:
+		return kind == CardDefinition.Kind.HEAL
+	return str(kind).to_lower() == "heal"
+
+
 func _apply_damage(effect_data: Dictionary) -> void:
 	var amount := int(effect_data.get("amount", 0))
 	if amount == 0:
 		return
 	var target_is_opponent: bool = effect_data.get("target_is_opponent", true)
 	damage_applied.emit(amount, target_is_opponent)
+
+
+func _apply_heal(effect_data: Dictionary) -> void:
+	var amount := int(effect_data.get("amount", 0))
+	if amount == 0:
+		return
+	var target_is_opponent: bool = effect_data.get("target_is_opponent", false)
+	heal_applied.emit(amount, target_is_opponent)
 
 
 func _on_damage_applied(amount: int, target_is_opponent: bool) -> void:
@@ -130,6 +150,17 @@ func _on_damage_applied(amount: int, target_is_opponent: bool) -> void:
 		target.apply_damage(amount)
 	else:
 		print("DEBUG effects: target bar missing for damage, target_is_opponent=", target_is_opponent)
+
+
+func _on_heal_applied(amount: int, target_is_opponent: bool) -> void:
+	var root := get_tree().root
+	var opp_bar := root.find_child("Opp_HealthBar", true, false)
+	var player_bar := root.find_child("HealthBar", true, false)
+	var target := opp_bar if target_is_opponent else player_bar
+	if target and target.has_method("apply_heal"):
+		target.apply_heal(amount)
+	else:
+		print("DEBUG effects: target bar missing for heal, target_is_opponent=", target_is_opponent)
 
 
 

@@ -395,7 +395,7 @@ func _debug_play_effect() -> void:
 		"special_value": definition.special_value,
 		"duration_rounds": definition.duration_rounds,
 		"source_card": definition.id,
-		"target_is_opponent": _get_target_is_opponent(),
+		"target_is_opponent": _get_target_is_opponent(definition.kind),
 	}
 	mgr.queue_effect(effect_data)
 	mgr.resolve_next()
@@ -411,9 +411,14 @@ func _get_effects_manager():
 	return null
 
 
-func _get_target_is_opponent() -> bool:
+func _get_target_is_opponent(kind = null) -> bool:
 	if has_meta("target_is_opponent"):
 		return bool(get_meta("target_is_opponent"))
+	if kind != null:
+		if typeof(kind) == TYPE_INT and kind == CardDefinition.Kind.HEAL:
+			return false
+		if typeof(kind) != TYPE_INT and str(kind).to_lower() == "heal":
+			return false
 	return true
 
 

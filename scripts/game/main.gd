@@ -53,6 +53,10 @@ func _play_opp_card(card: Node) -> void:
 		card._apply_zoom_mode()
 	if card.has_method("set"):
 		card.set("_is_in_play_area", true)
-		card.set_meta("target_is_opponent", false)
+		var defn = card.get("definition") if card.has_method("get") else null
+		if defn != null and defn.kind == CardDefinition.Kind.DAMAGE:
+			card.set_meta("target_is_opponent", false) # damage targets player
+		elif defn != null and defn.kind == CardDefinition.Kind.HEAL:
+			card.set_meta("target_is_opponent", true) # heal targets opponent self
 	if card.has_method("_debug_play_effect"):
 		card.call_deferred("_debug_play_effect")
