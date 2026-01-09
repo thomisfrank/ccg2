@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://b7jqa3uqqpij7"]
+[gd_scene load_steps=9 format=3 uid="uid://b7jqa3uqqpij7"]
 
 [ext_resource type="Texture2D" uid="uid://clrhh8fqalguh" path="res://assets/Group 192.png" id="1_yextr"]
 [ext_resource type="Shader" uid="uid://mud5leqlxagd" path="res://scripts/shaders/gradient.gdshader" id="2_ygqwe"]
 [ext_resource type="FontFile" uid="uid://bnd6fpxmrh3xk" path="res://assets/fonts/Oswald-Bold.ttf" id="3_6y1fx"]
+[ext_resource type="Script" path="res://scripts/core/health_bar.gd" id="4_7yy0s"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yextr"]
 bg_color = Color(0.59878296, 0.061659485, 0.06487491, 1)
@@ -34,6 +35,7 @@ corner_radius_bottom_right = 20
 corner_radius_bottom_left = 20
 
 [node name="HealthBar" type="Control"]
+script = ExtResource("4_7yy0s")
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -68,7 +70,7 @@ offset_right = 185.63553
 offset_bottom = -228.28162
 theme_override_styles/panel = SubResource("StyleBoxFlat_e3oem")
 
-[node name="health_value" type="Label" parent="icon/plate"]
+[node name="health_total" type="Label" parent="icon/plate"]
 layout_mode = 0
 offset_right = 368.7627
 offset_bottom = 296.01376

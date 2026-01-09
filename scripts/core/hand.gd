@@ -40,6 +40,14 @@ func add_card(card: Control) -> bool:
 	return _add_card_internal(card, Vector2.ZERO, false)
 
 
+func remove_card(card: Control) -> void:
+	for i in range(_cards_in_slots.size()):
+		if _cards_in_slots[i] == card:
+			_cards_in_slots[i] = null
+			_update_z_order()
+			return
+
+
 func add_card_from_pos(card: Control, from_global_pos: Vector2) -> bool:
 	return _add_card_internal(card, from_global_pos, true)
 

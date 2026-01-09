@@ -31,6 +31,7 @@ const BALANCE_ICON: Texture2D = preload("res://assets/Card/Icons/BalanceIcon.png
 @export var drag_enabled: bool = true
 @export var drag_glow_color: Color = Color(1.0, 0.78, 0.2, 1.0)
 @export var drag_glow_strength: float = 1.1
+@export var debug_play_delay: float = 0.35
 
 var _base_z_index: int = 0
 static var _hover_owner: Node = null
@@ -39,6 +40,7 @@ var _is_hovered: bool = false
 var _is_dragging: bool = false
 var _drag_offset: Vector2 = Vector2.ZERO
 var _drag_restore_z: int = 0
+var _is_in_play_area: bool = false
 
 @onready var _drag_glow: ColorRect = get_node_or_null("DragGlow") as ColorRect
 
@@ -234,6 +236,8 @@ func _apply_text_scale_from_parent() -> void:
 
 
 func _apply_thumbnail_mode() -> void:
+	if _is_in_play_area:
+		return
 	scale = Vector2(thumbnail_scale, thumbnail_scale)
 	_thumb_value_label.visible = true
 	_title_frame.visible = false
@@ -329,10 +333,15 @@ func _end_drag() -> void:
 	_is_dragging = false
 	_set_drag_glow(false)
 	_set_play_area_glow(false)
-	if _is_hovered:
-		_apply_zoom_mode()
+	var play_area := _get_play_area_under_mouse()
+	if play_area:
+		_drop_to_play_area(play_area)
 	else:
-		_apply_thumbnail_mode()
+		if _is_hovered:
+			_apply_zoom_mode()
+		else:
+			_apply_thumbnail_mode()
+	print("DEBUG drop end: play_area=", play_area, " mouse=", get_global_mouse_position())
 	z_index = _drag_restore_z
 
 
@@ -354,3 +363,76 @@ func _set_drag_glow(enabled: bool) -> void:
 
 func _set_play_area_glow(enabled: bool) -> void:
 	get_tree().call_group("play_area", "set_drag_indicator_glow", enabled)
+
+
+func _get_play_area_under_mouse() -> Control:
+	var mouse_pos := get_global_mouse_position()
+	for node in get_tree().get_nodes_in_group("play_area"):
+		if node is Control:
+			var rect := (node as Control).get_global_rect()
+			if rect.has_point(mouse_pos):
+				print("DEBUG hit play_area:", node.name, "rect=", rect, "mouse=", mouse_pos)
+				return node as Control
+	return null
+
+
+func _debug_queue_play() -> void:
+	await get_tree().create_timer(debug_play_delay).timeout
+	_debug_play_effect()
+
+
+func _debug_play_effect() -> void:
+	if definition == null:
+		return
+	var mgr = _get_effects_manager()
+	if mgr == null:
+		print("DEBUG effect: no effects manager found")
+		return
+	print("DEBUG effect: queue", definition.id, "kind=", definition.kind, "amount=", definition.amount)
+	var effect_data: Dictionary = {
+		"kind": definition.kind,
+		"amount": definition.amount,
+		"special_value": definition.special_value,
+		"duration_rounds": definition.duration_rounds,
+		"source_card": definition.id,
+		"target_is_opponent": _get_target_is_opponent(),
+	}
+	mgr.queue_effect(effect_data)
+	mgr.resolve_next()
+	_reparent_to_hand_if_needed()
+
+
+func _get_effects_manager():
+	var mgr = get_tree().get_first_node_in_group("effects_manager")
+	if mgr != null:
+		return mgr
+	if get_tree().has_node("/root/EffectsManager"):
+		return get_tree().get_node("/root/EffectsManager")
+	return null
+
+
+func _get_target_is_opponent() -> bool:
+	if has_meta("target_is_opponent"):
+		return bool(get_meta("target_is_opponent"))
+	return true
+
+
+func _drop_to_play_area(area: Control) -> void:
+	var parent_hand := get_parent()
+	if parent_hand and parent_hand.has_method("remove_card"):
+		parent_hand.remove_card(self)
+	if get_parent() != area:
+		if get_parent():
+			get_parent().remove_child(self)
+		area.add_child(self)
+	global_position = area.get_global_rect().get_center()
+	rotation = 0.0
+	_is_in_play_area = true
+	set_shadow_visible(false)
+	_apply_zoom_mode()
+	_debug_queue_play()
+
+
+func _reparent_to_hand_if_needed() -> void:
+	# If we later want to snap back after debug play, we could implement here.
+	pass

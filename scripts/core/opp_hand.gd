@@ -47,6 +47,14 @@ func add_card(card: Control) -> bool:
 	return true
 
 
+func remove_card(card: Control) -> void:
+	for i in range(_cards_in_slots.size()):
+		if _cards_in_slots[i] == card:
+			_cards_in_slots[i] = null
+			_update_z_order()
+			return
+
+
 func _process(delta: float) -> void:
 	if not wave_enabled:
 		_apply_base_positions()

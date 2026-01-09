@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://bijishik3f1kn"]
+[gd_scene load_steps=12 format=3 uid="uid://bijishik3f1kn"]
 
 [ext_resource type="PackedScene" uid="uid://b7jqa3uqqpij7" path="res://scenes/core/healthBar.tscn" id="1_llaio"]
 [ext_resource type="PackedScene" uid="uid://rjpw42ljt74c" path="res://scenes/core/opp_health_bar.tscn" id="2_oekm8"]
@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://enfqkoapd1io" path="res://scenes/core/discard_pile.tscn" id="7_g38uy"]
 [ext_resource type="PackedScene" uid="uid://bio3822n605rm" path="res://scenes/core/turn_timer.tscn" id="8_5v64u"]
 [ext_resource type="FontFile" uid="uid://b6o8kshd0tc7a" path="res://assets/fonts/Oswald-SemiBold.ttf" id="9_8aysu"]
+[ext_resource type="Script" path="res://scripts/game/main.gd" id="10_4y0hi"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mkoeh"]
 bg_color = Color(0.3764706, 0.3764706, 0.3882353, 1)
@@ -18,6 +19,7 @@ corner_radius_bottom_right = 20
 corner_radius_bottom_left = 20
 
 [node name="main" type="Node2D"]
+script = ExtResource("10_4y0hi")
 metadata/_edit_vertical_guides_ = [26.0, 1157.0, 116.0, 1086.0]
 
 [node name="HealthBar" parent="." instance=ExtResource("1_llaio")]
@@ -110,3 +112,11 @@ theme_override_font_sizes/font_size = 60
 theme_override_styles/normal = SubResource("StyleBoxFlat_mkoeh")
 disabled = true
 text = "submit"
+
+[node name="DebugOppPlay" type="Button" parent="."]
+custom_minimum_size = Vector2(180, 60)
+offset_left = 24.0
+offset_top = 24.0
+offset_right = 204.0
+offset_bottom = 84.0
+text = "Opp Play Damage"
