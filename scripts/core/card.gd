@@ -28,11 +28,19 @@ const BALANCE_ICON: Texture2D = preload("res://assets/Card/Icons/BalanceIcon.png
 @export var thumbnail_scale: float = 0.5
 @export var zoom_scale: float = 1.0
 @export var hover_z_index: int = 100
+@export var drag_enabled: bool = true
+@export var drag_glow_color: Color = Color(1.0, 0.78, 0.2, 1.0)
+@export var drag_glow_strength: float = 1.1
 
 var _base_z_index: int = 0
 static var _hover_owner: Node = null
 var _hover_enabled: bool = true
 var _is_hovered: bool = false
+var _is_dragging: bool = false
+var _drag_offset: Vector2 = Vector2.ZERO
+var _drag_restore_z: int = 0
+
+@onready var _drag_glow: ColorRect = get_node_or_null("DragGlow") as ColorRect
 
 
 func _ready() -> void:
@@ -59,6 +67,8 @@ func _ready() -> void:
 		_area.monitorable = true
 		_area.mouse_entered.connect(_on_mouse_entered)
 		_area.mouse_exited.connect(_on_mouse_exited)
+		_area.input_event.connect(_on_area_input)
+	_configure_drag_glow()
 
 
 func apply_definition(defn: CardDefinition) -> void:
@@ -271,3 +281,76 @@ func set_hover_enabled(enabled: bool) -> void:
 
 func is_hovered() -> bool:
 	return _is_hovered
+
+
+func is_dragging() -> bool:
+	return _is_dragging
+
+
+func _process(_delta: float) -> void:
+	if _is_dragging:
+		global_position = get_global_mouse_position() + _drag_offset
+
+
+func _on_area_input(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
+	if not drag_enabled:
+		return
+	
+	# Handle mouse input
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		if event.pressed:
+			_start_drag()
+		else:
+			_end_drag()
+	
+	# Handle touch input
+	if event is InputEventScreenTouch:
+		if event.pressed:
+			_start_drag()
+		else:
+			_end_drag()
+
+
+func _start_drag() -> void:
+	if _is_dragging:
+		return
+	_is_dragging = true
+	_drag_offset = global_position - get_global_mouse_position()
+	_drag_restore_z = z_index
+	z_index = hover_z_index + 10
+	_set_drag_glow(true)
+	_set_play_area_glow(true)
+	_apply_zoom_mode()
+
+
+func _end_drag() -> void:
+	if not _is_dragging:
+		return
+	_is_dragging = false
+	_set_drag_glow(false)
+	_set_play_area_glow(false)
+	if _is_hovered:
+		_apply_zoom_mode()
+	else:
+		_apply_thumbnail_mode()
+	z_index = _drag_restore_z
+
+
+func _configure_drag_glow() -> void:
+	if _drag_glow == null:
+		return
+	if _drag_glow.material is ShaderMaterial:
+		var mat := _drag_glow.material as ShaderMaterial
+		mat.set_shader_parameter("glow_color", drag_glow_color)
+		mat.set_shader_parameter("glow_strength", drag_glow_strength)
+	_drag_glow.visible = false
+
+
+func _set_drag_glow(enabled: bool) -> void:
+	if _drag_glow == null:
+		return
+	_drag_glow.visible = enabled
+
+
+func _set_play_area_glow(enabled: bool) -> void:
+	get_tree().call_group("play_area", "set_drag_indicator_glow", enabled)

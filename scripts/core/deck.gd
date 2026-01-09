@@ -3,8 +3,13 @@ extends Control
 const CARD_SCENE: PackedScene = preload("res://scenes/core/card.tscn")
 
 @export var hand_path: NodePath
+@export var deck_recipe: DeckRecipe
 @export var stack_offset: Vector2 = Vector2(0, -1)
 @export var stack_max_visible: int = 10
+@export var initial_hand_size: int = 3
+@export var auto_draw_on_ready: bool = true
+@export var auto_draw_delay: float = 0.05
+@export var deck_z_index: int = -100
 # Hand-specific properties removed; hand will be a separate scene
 
 @onready var deck_spawn: ReferenceRect = $DeckSpawnPoint
@@ -14,11 +19,14 @@ var _deck: Array[CardDefinition] = []
 var _deck_cards: Array[Control] = []
 
 func _ready() -> void:
+	z_index = deck_z_index
 	_resolve_hand()
 	deck_spawn.mouse_filter = Control.MOUSE_FILTER_STOP
 	deck_spawn.gui_input.connect(_on_deck_spawn_input)
 	_build_deck()
 	_spawn_deck_stack()
+	if auto_draw_on_ready and initial_hand_size > 0:
+		call_deferred("_start_auto_draw", initial_hand_size)
 
 
 func _spawn_deck_stack() -> void:
@@ -52,12 +60,18 @@ func _draw_card_to_hand() -> void:
 	if _hand.has_method("has_space") and not _hand.call("has_space"):
 		return
 	var card: Control = _deck_cards.pop_back()
+	var start_pos := card.global_position
 	card.get_parent().remove_child(card)
 	var added := false
-	if _hand.has_method("add_card"):
+	if _hand.has_method("add_card_from_pos"):
+		added = _hand.call("add_card_from_pos", card, start_pos)
+	elif _hand.has_method("add_card"):
 		added = _hand.call("add_card", card)
 	if not added:
 		_return_card_to_top(card)
+		return
+	if _hand.has_signal("card_draw_finished"):
+		await _hand.card_draw_finished
 
 
 func _return_card_to_top(card: Control) -> void:
@@ -83,49 +97,47 @@ func _resolve_hand() -> void:
 
 func _build_deck() -> void:
 	_deck.clear()
-	_deck.append_array(_make_cards("Damage", CardDefinition.Kind.DAMAGE, "red", 25, 0, 1))
-	_deck.append_array(_make_cards("Damage", CardDefinition.Kind.DAMAGE, "red", 15, 0, 2))
-	_deck.append_array(_make_cards("Damage", CardDefinition.Kind.DAMAGE, "red", 10, 0, 5))
-
-	_deck.append_array(_make_cards("Heal", CardDefinition.Kind.HEAL, "yellow", 15, 0, 2))
-	_deck.append_array(_make_cards("Heal", CardDefinition.Kind.HEAL, "yellow", 10, 0, 3))
-	_deck.append_array(_make_cards("Heal", CardDefinition.Kind.HEAL, "yellow", 5, 0, 3))
-
-	_deck.append_array(_make_cards("Discard", CardDefinition.Kind.DISCARD, "blue", 0, 2, 6))
-	_deck.append_array(_make_cards("Discard", CardDefinition.Kind.DISCARD, "blue", 0, 3, 2))
-
-	_deck.append_array(_make_cards("Regenerate", CardDefinition.Kind.REGENERATE, "white", 4, 0, 1, 3, "persistent"))
-	_deck.append_array(_make_cards("Bleed", CardDefinition.Kind.BLEED, "black", 4, 0, 1, 3, "persistent"))
-	_deck.append_array(_make_cards("Replenish", CardDefinition.Kind.REPLENISH, "green", 0, 1, 1, 3, "persistent"))
-	_deck.append_array(_make_cards("Balance", CardDefinition.Kind.BALANCE, "gradient", 0, 0, 1))
+	if deck_recipe != null:
+		_deck.append_array(DeckBuilder.build_shuffled_deck(deck_recipe))
+	else:
+		_deck.append_array(DeckFactory.build_standard_deck())
 
 
-func _make_cards(
-	card_name: String,
-	kind: CardDefinition.Kind,
-	suit: String,
-	amount: int,
-	count: int,
-	copies: int,
-	duration_rounds: int = 0,
-	special_value: String = "none"
-) -> Array[CardDefinition]:
-	var cards: Array[CardDefinition] = []
-	for i in range(copies):
-		var defn: CardDefinition = CardDefinition.new()
-		defn.id = card_name
-		defn.kind = kind
-		defn.suit = suit
-		defn.amount = amount
-		defn.count = count
-		defn.duration_rounds = duration_rounds
-		defn.special_value = special_value
-		cards.append(defn)
-	return cards
+func _draw_cards(count: int) -> void:
+	for i in range(count):
+		if _deck_cards.is_empty():
+			return
+		_draw_card_to_hand()
+
+
+func _start_auto_draw(count: int) -> void:
+	await get_tree().process_frame
+	await _draw_cards_async(count)
+
+
+func _draw_cards_async(count: int) -> void:
+	for i in range(count):
+		if _deck_cards.is_empty():
+			return
+		await _draw_card_to_hand()
+		if auto_draw_delay > 0.0:
+			await get_tree().create_timer(auto_draw_delay).timeout
+
+
+func get_remaining_count() -> int:
+	return _deck_cards.size()
 
 
 func _on_card_input(_viewport: Node, event: InputEvent, _shape_idx: int, card: Control) -> void:
+	# Handle mouse input
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+		if _deck_cards.is_empty():
+			return
+		if card == _deck_cards[_deck_cards.size() - 1]:
+			_draw_card_to_hand()
+	
+	# Handle touch input
+	if event is InputEventScreenTouch and event.pressed:
 		if _deck_cards.is_empty():
 			return
 		if card == _deck_cards[_deck_cards.size() - 1]:
@@ -133,7 +145,14 @@ func _on_card_input(_viewport: Node, event: InputEvent, _shape_idx: int, card: C
 
 
 func _on_deck_spawn_input(event: InputEvent) -> void:
+	# Handle mouse input
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+		if _deck_cards.is_empty():
+			return
+		_draw_card_to_hand()
+	
+	# Handle touch input
+	if event is InputEventScreenTouch and event.pressed:
 		if _deck_cards.is_empty():
 			return
 		_draw_card_to_hand()

@@ -108,10 +108,16 @@ func _tier_icon(base_path: String, prefix: String, tier: IconTier) -> Texture2D:
 		if ResourceLoader.exists(unique_path):
 			return load(unique_path)
 		tier = IconTier.SMALL
-
-	var suffix := "SMALL"
-	if tier == IconTier.MED:
-		suffix = "MED"
-	elif tier == IconTier.BIG:
-		suffix = "BIG"
-	return load(base_path + prefix + suffix + ".png")
+	var suffix_order: Array[String] = []
+	match tier:
+		IconTier.BIG:
+			suffix_order = ["BIG", "MED", "SMALL"]
+		IconTier.MED:
+			suffix_order = ["MED", "SMALL", "BIG"]
+		_:
+			suffix_order = ["SMALL", "MED", "BIG"]
+	for suffix in suffix_order:
+		var path := base_path + prefix + suffix + ".png"
+		if ResourceLoader.exists(path):
+			return load(path)
+	return null

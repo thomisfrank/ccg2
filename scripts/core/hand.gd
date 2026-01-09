@@ -1,5 +1,7 @@
 extends Control
 
+signal card_draw_finished(card: Control)
+
 @export var slot_paths: Array[NodePath] = []
 @export var deck_path: NodePath
 
@@ -12,6 +14,9 @@ var _slot_centers: Array[Vector2] = []
 @export var wave_amplitude: float = 8.0
 @export var wave_frequency: float = 1.5
 @export var wave_phase_shift: float = 1.0
+@export var draw_animation_duration: float = 0.25
+@export var draw_animation_trans: Tween.TransitionType = Tween.TRANS_CUBIC
+@export var draw_animation_ease: Tween.EaseType = Tween.EASE_OUT
 
 var _wave_time: float = 0.0
 
@@ -32,19 +37,11 @@ func has_space() -> bool:
 
 
 func add_card(card: Control) -> bool:
-	var slot_index := _find_first_empty_slot()
-	if slot_index == -1:
-		return false
-	var slot := _slots[slot_index]
-	if card.get_parent() != null:
-		card.get_parent().remove_child(card)
-	add_child(card)
-	_prepare_card_for_hand(card)
-	_place_card_in_slot(card, slot)
-	_cards_in_slots[slot_index] = card
-	_slot_centers[slot_index] = slot.get_global_rect().get_center()
-	_update_z_order()
-	return true
+	return _add_card_internal(card, Vector2.ZERO, false)
+
+
+func add_card_from_pos(card: Control, from_global_pos: Vector2) -> bool:
+	return _add_card_internal(card, from_global_pos, true)
 
 
 func _process(delta: float) -> void:
@@ -55,6 +52,10 @@ func _process(delta: float) -> void:
 	for i in range(_cards_in_slots.size()):
 		var card := _cards_in_slots[i]
 		if card == null:
+			continue
+		if card.has_method("is_dragging") and card.is_dragging():
+			continue
+		if card.has_meta("hand_animating") and card.get_meta("hand_animating"):
 			continue
 		var base := _slot_centers[i]
 		if base == Vector2.ZERO and i < _slots.size():
@@ -110,6 +111,51 @@ func _place_card_in_slot(card: Control, slot: ReferenceRect) -> void:
 	var rect := slot.get_global_rect()
 	card.global_position = rect.get_center()
 	card.rotation = slot.rotation
+
+
+func _add_card_internal(card: Control, from_global_pos: Vector2, animate: bool) -> bool:
+	var slot_index := _find_first_empty_slot()
+	if slot_index == -1:
+		return false
+	var slot := _slots[slot_index]
+	if card.get_parent() != null:
+		card.get_parent().remove_child(card)
+	add_child(card)
+	_prepare_card_for_hand(card)
+	var target := _get_slot_center(slot, slot_index)
+	card.rotation = slot.rotation
+	if animate and from_global_pos != Vector2.ZERO:
+		card.global_position = from_global_pos
+		card.set_meta("hand_animating", true)
+		var tween := create_tween()
+		tween.set_trans(draw_animation_trans)
+		tween.set_ease(draw_animation_ease)
+		tween.tween_property(card, "global_position", target, draw_animation_duration)
+		tween.finished.connect(func() -> void:
+			card.set_meta("hand_animating", false)
+			_emit_draw_finished(card)
+		)
+	else:
+		card.global_position = target
+		call_deferred("_emit_draw_finished", card)
+	_cards_in_slots[slot_index] = card
+	_slot_centers[slot_index] = target
+	_update_z_order()
+	return true
+
+
+func _get_slot_center(slot: ReferenceRect, slot_index: int) -> Vector2:
+	var rect := slot.get_global_rect()
+	var center := rect.get_center()
+	if center == Vector2.ZERO and slot_index < _slot_centers.size():
+		center = _slot_centers[slot_index]
+	if center == Vector2.ZERO:
+		center = rect.position + (rect.size * 0.5)
+	return center
+
+
+func _emit_draw_finished(card: Control) -> void:
+	emit_signal("card_draw_finished", card)
 
 
 func _update_z_order() -> void:

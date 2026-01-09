@@ -72,7 +72,15 @@ func _layout_hand() -> void:
 
 
 func _on_card_input(_viewport: Node, event: InputEvent, _shape_idx: int, card: Control) -> void:
+	# Handle mouse input
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+		if _deck_cards.is_empty():
+			return
+		if card == _deck_cards[_deck_cards.size() - 1]:
+			_draw_card()
+	
+	# Handle touch input
+	if event is InputEventScreenTouch and event.pressed:
 		if _deck_cards.is_empty():
 			return
 		if card == _deck_cards[_deck_cards.size() - 1]:

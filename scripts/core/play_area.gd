@@ -1,11 +1,21 @@
 extends Panel
 
+@export var is_opponent: bool = false
 
-# Called when the node enters the scene tree for the first time.
+@onready var _indicator_glow: ColorRect = get_node_or_null("IndicatorGlow") as ColorRect
+
+
 func _ready() -> void:
-	pass # Replace with function body.
+	if not is_opponent:
+		add_to_group("play_area")
+	_set_indicator_glow(false)
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
+func set_drag_indicator_glow(enabled: bool) -> void:
+	_set_indicator_glow(enabled)
+
+
+func _set_indicator_glow(enabled: bool) -> void:
+	if _indicator_glow == null:
+		return
+	_indicator_glow.visible = enabled

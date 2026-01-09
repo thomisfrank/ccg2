@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://bodw2xkfnn7gb"]
+[gd_scene load_steps=7 format=3 uid="uid://bodw2xkfnn7gb"]
 
 [ext_resource type="Shader" uid="uid://cm6gbhyamkiad" path="res://scripts/shaders/dotted_border.gdshader" id="1_y33kl"]
+[ext_resource type="Shader" uid="uid://dx7wyxhlwef77" path="res://scripts/shaders/drag_glow.gdshader" id="2_2d8tq"]
 [ext_resource type="Script" uid="uid://dlqnj0tqqrnbt" path="res://scripts/core/play_area.gd" id="2_xc6wq"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_8u6w5"]
@@ -22,6 +23,14 @@ corner_radius_top_right = 20
 corner_radius_bottom_right = 20
 corner_radius_bottom_left = 20
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2d8tq"]
+shader = ExtResource("2_2d8tq")
+shader_parameter/glow_color = Color(0.2, 0.95, 0.8, 1)
+shader_parameter/glow_strength = 1.0
+shader_parameter/pulse_speed = 1.8
+shader_parameter/edge_width = 0.07
+shader_parameter/inner_fade = 0.02
+
 [node name="PlayArea" type="Panel"]
 material = SubResource("ShaderMaterial_8u6w5")
 custom_minimum_size = Vector2(500, 700)
@@ -29,3 +38,16 @@ offset_right = 500.0
 offset_bottom = 700.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_k1q58")
 script = ExtResource("2_xc6wq")
+
+[node name="IndicatorGlow" type="ColorRect" parent="."]
+visible = false
+z_index = 5
+custom_minimum_size = Vector2(520, 720)
+layout_mode = 0
+offset_left = -10.0
+offset_top = -10.0
+offset_right = 510.0
+offset_bottom = 710.0
+mouse_filter = 2
+color = Color(1, 1, 1, 0)
+material = SubResource("ShaderMaterial_2d8tq")

@@ -33,6 +33,7 @@ offset_right = 24.0
 offset_bottom = 72.0
 
 [node name="opp_deck" parent="." instance=ExtResource("3_yd8kv")]
+z_index = -1
 offset_left = 735.0
 offset_top = 432.0
 offset_right = 735.0
@@ -47,6 +48,7 @@ offset_bottom = 181.0
 deck_path = NodePath("../opp_deck")
 
 [node name="deck" parent="." instance=ExtResource("3_yd8kv")]
+z_index = -1
 offset_left = -108.0
 offset_top = 1382.0
 offset_right = -108.0
@@ -87,6 +89,7 @@ offset_top = 1093.0
 offset_right = 621.0
 offset_bottom = 1793.0
 scale = Vector2(0.5, 0.5)
+is_opponent = true
 
 [node name="TurnTimer" parent="." instance=ExtResource("8_5v64u")]
 visible = false
