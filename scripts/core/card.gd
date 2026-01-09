@@ -15,6 +15,7 @@ extends Control
 @onready var _effect_tag: Panel = $"DescriptionFrame/EffectTag"
 @onready var _effect_label: Label = $"DescriptionFrame/EffectTag/EffectLabel"
 @onready var _thumb_value_label: Label = $"THUMBvalue"
+@onready var _cardback: Panel = get_node_or_null("CARDBACK") as Panel
 @onready var _area: Area2D = $"Area2D"
 @onready var _title_frame: Panel = $"Title_ValueFrame"
 @onready var _description_frame: Panel = $"DescriptionFrame"
@@ -30,6 +31,8 @@ const BALANCE_ICON: Texture2D = preload("res://assets/Card/Icons/BalanceIcon.png
 
 var _base_z_index: int = 0
 static var _hover_owner: Node = null
+var _hover_enabled: bool = true
+var _is_hovered: bool = false
 
 
 func _ready() -> void:
@@ -42,6 +45,9 @@ func _ready() -> void:
 	_shadow.z_index = _base_z_index
 	if _image_slot != null:
 		_image_slot.clip_contents = true
+		_image_slot.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	if _cardback != null:
+		_set_control_mouse_filter_recursive(_cardback, Control.MOUSE_FILTER_IGNORE)
 	if definition == null:
 		_apply_thumbnail_mode()
 	else:
@@ -85,6 +91,25 @@ func apply_definition(defn: CardDefinition) -> void:
 
 	_apply_suit_colors(defn.suit)
 	_apply_effect_tag(defn.special_value)
+
+
+func set_face_down(is_face_down: bool) -> void:
+	if _cardback != null:
+		_cardback.visible = is_face_down
+	if _image_slot != null:
+		_image_slot.visible = not is_face_down
+
+
+func set_shadow_visible(shadow_visible: bool) -> void:
+	if _shadow != null:
+		_shadow.visible = shadow_visible
+
+
+func _set_control_mouse_filter_recursive(node: Node, filter: Control.MouseFilter) -> void:
+	if node is Control:
+		(node as Control).mouse_filter = filter
+	for child in node.get_children():
+		_set_control_mouse_filter_recursive(child, filter)
 
 
 func _apply_suit_colors(suit_value: String) -> void:
@@ -216,13 +241,33 @@ func _apply_zoom_mode() -> void:
 
 
 func _on_mouse_entered() -> void:
+	if not _hover_enabled:
+		return
 	if _hover_owner != null and _hover_owner != self and is_instance_valid(_hover_owner):
 		_hover_owner.call("_apply_thumbnail_mode")
 	_hover_owner = self
+	_is_hovered = true
 	_apply_zoom_mode()
 
 
 func _on_mouse_exited() -> void:
+	if not _hover_enabled:
+		return
 	if _hover_owner == self:
 		_hover_owner = null
+	_is_hovered = false
 	_apply_thumbnail_mode()
+
+
+func set_hover_enabled(enabled: bool) -> void:
+	_hover_enabled = enabled
+	if not enabled:
+		_is_hovered = false
+	if _area != null:
+		_area.input_pickable = enabled
+		_area.monitoring = enabled
+		_area.monitorable = enabled
+
+
+func is_hovered() -> bool:
+	return _is_hovered

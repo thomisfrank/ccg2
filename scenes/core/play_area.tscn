@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=3 uid="uid://bodw2xkfnn7gb"]
+
+[ext_resource type="Shader" uid="uid://cm6gbhyamkiad" path="res://scripts/shaders/dotted_border.gdshader" id="1_y33kl"]
+[ext_resource type="Script" uid="uid://dlqnj0tqqrnbt" path="res://scripts/core/play_area.gd" id="2_xc6wq"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8u6w5"]
+shader = ExtResource("1_y33kl")
+shader_parameter/border_width = 0.03
+shader_parameter/dot_spacing = 0.15
+shader_parameter/dot_length = 0.08
+shader_parameter/border_color = Color(1, 1, 1, 1)
+shader_parameter/bg_color = Color(1, 1, 1, 0.05882353)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k1q58"]
+bg_color = Color(1, 1, 1, 0.05882353)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[node name="PlayArea" type="Panel"]
+material = SubResource("ShaderMaterial_8u6w5")
+custom_minimum_size = Vector2(500, 700)
+offset_right = 500.0
+offset_bottom = 700.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_k1q58")
+script = ExtResource("2_xc6wq")

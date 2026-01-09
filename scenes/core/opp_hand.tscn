@@ -1,0 +1,45 @@
+[gd_scene load_steps=2 format=3 uid="uid://d4k2fmxy8hgts"]
+
+[ext_resource type="Script" uid="uid://dhschdfmknxbd" path="res://scripts/core/opp_hand.gd" id="1_iy1xd"]
+
+[node name="opp_hand" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_iy1xd")
+slot_paths = Array[NodePath]([NodePath("hand_slot"), NodePath("hand_slot2"), NodePath("hand_slot3")])
+
+[node name="hand_slot" type="ReferenceRect" parent="."]
+custom_minimum_size = Vector2(500, 700)
+layout_mode = 0
+offset_left = 36.0
+offset_top = -1.0000002
+offset_right = 536.0
+offset_bottom = 699.0
+rotation = 0.08726646
+scale = Vector2(0.5, 0.5)
+border_width = 10.0
+
+[node name="hand_slot2" type="ReferenceRect" parent="."]
+custom_minimum_size = Vector2(500, 700)
+layout_mode = 0
+offset_left = 292.0
+offset_top = 21.0
+offset_right = 792.0
+offset_bottom = 721.0
+scale = Vector2(0.5, 0.5)
+border_width = 10.0
+
+[node name="hand_slot3" type="ReferenceRect" parent="."]
+custom_minimum_size = Vector2(500, 700)
+layout_mode = 0
+offset_left = 551.0
+offset_top = 20.000004
+offset_right = 1051.0
+offset_bottom = 720.0
+rotation = -0.08726646
+scale = Vector2(0.5, 0.5)
+border_width = 10.0

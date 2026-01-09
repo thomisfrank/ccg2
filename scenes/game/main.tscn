@@ -1,3 +1,109 @@
-[gd_scene format=3 uid="uid://bijishik3f1kn"]
+[gd_scene load_steps=11 format=3 uid="uid://bijishik3f1kn"]
+
+[ext_resource type="PackedScene" uid="uid://b7jqa3uqqpij7" path="res://scenes/core/healthBar.tscn" id="1_llaio"]
+[ext_resource type="PackedScene" uid="uid://rjpw42ljt74c" path="res://scenes/core/opp_health_bar.tscn" id="2_oekm8"]
+[ext_resource type="PackedScene" uid="uid://bw8rll1caxj4u" path="res://scenes/core/deck.tscn" id="3_yd8kv"]
+[ext_resource type="PackedScene" uid="uid://028ryjyjdcg3" path="res://scenes/core/hand.tscn" id="4_c390r"]
+[ext_resource type="PackedScene" uid="uid://d4k2fmxy8hgts" path="res://scenes/core/opp_hand.tscn" id="4_iba00"]
+[ext_resource type="PackedScene" uid="uid://bodw2xkfnn7gb" path="res://scenes/core/play_area.tscn" id="6_j7lav"]
+[ext_resource type="PackedScene" uid="uid://enfqkoapd1io" path="res://scenes/core/discard_pile.tscn" id="7_g38uy"]
+[ext_resource type="PackedScene" uid="uid://bio3822n605rm" path="res://scenes/core/turn_timer.tscn" id="8_5v64u"]
+[ext_resource type="FontFile" uid="uid://b6o8kshd0tc7a" path="res://assets/fonts/Oswald-SemiBold.ttf" id="9_8aysu"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mkoeh"]
+bg_color = Color(0.3764706, 0.3764706, 0.3882353, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
 
 [node name="main" type="Node2D"]
+metadata/_edit_vertical_guides_ = [26.0, 1157.0, 116.0, 1086.0]
+
+[node name="HealthBar" parent="." instance=ExtResource("1_llaio")]
+offset_left = 26.0
+offset_top = 2416.0
+offset_right = 26.0
+offset_bottom = 2416.0
+
+[node name="Opp_HealthBar" parent="." instance=ExtResource("2_oekm8")]
+offset_left = 24.0
+offset_top = 72.0
+offset_right = 24.0
+offset_bottom = 72.0
+
+[node name="opp_deck" parent="." instance=ExtResource("3_yd8kv")]
+offset_left = 735.0
+offset_top = 432.0
+offset_right = 735.0
+offset_bottom = 432.0
+hand_path = NodePath("../opp_hand")
+
+[node name="opp_hand" parent="." instance=ExtResource("4_iba00")]
+offset_left = 256.0
+offset_top = 181.0
+offset_right = 256.0
+offset_bottom = 181.0
+deck_path = NodePath("../opp_deck")
+
+[node name="deck" parent="." instance=ExtResource("3_yd8kv")]
+offset_left = -108.0
+offset_top = 1382.0
+offset_right = -108.0
+offset_bottom = 1382.0
+hand_path = NodePath("../hand")
+
+[node name="hand" parent="." instance=ExtResource("4_c390r")]
+offset_left = 114.0
+offset_top = 1971.0
+offset_right = 114.0
+offset_bottom = 1971.0
+deck_path = NodePath("../deck")
+
+[node name="discard_pile" parent="." instance=ExtResource("7_g38uy")]
+offset_left = 832.0
+offset_top = 1845.0
+offset_right = 1332.0
+offset_bottom = 2545.0
+scale = Vector2(0.5, 0.5)
+
+[node name="opp_discard_pile" parent="." instance=ExtResource("7_g38uy")]
+offset_top = 915.0
+offset_right = 501.0
+offset_bottom = 1615.0
+scale = Vector2(0.5, 0.5)
+is_opponent = true
+
+[node name="PlayArea" parent="." instance=ExtResource("6_j7lav")]
+offset_left = 833.0
+offset_top = 1105.0
+offset_right = 1333.0
+offset_bottom = 1805.0
+scale = Vector2(0.5, 0.5)
+
+[node name="OppPlayArea" parent="." instance=ExtResource("6_j7lav")]
+offset_left = 121.0
+offset_top = 1093.0
+offset_right = 621.0
+offset_bottom = 1793.0
+scale = Vector2(0.5, 0.5)
+
+[node name="TurnTimer" parent="." instance=ExtResource("8_5v64u")]
+visible = false
+offset_left = 501.0
+offset_top = 1167.0
+offset_right = 701.0
+offset_bottom = 1267.0
+
+[node name="SubmitButton" type="Button" parent="."]
+visible = false
+custom_minimum_size = Vector2(172, 98)
+offset_left = 517.0
+offset_top = 1287.0
+offset_right = 689.0
+offset_bottom = 1385.0
+theme_override_fonts/font = ExtResource("9_8aysu")
+theme_override_font_sizes/font_size = 60
+theme_override_styles/normal = SubResource("StyleBoxFlat_mkoeh")
+disabled = true
+text = "submit"

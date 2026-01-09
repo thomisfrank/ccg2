@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://cjk4kxrkd51g5"]
+[gd_scene load_steps=23 format=3 uid="uid://cjk4kxrkd51g5"]
 
 [ext_resource type="Shader" uid="uid://p7x8psciedbc" path="res://scripts/shaders/smoky.gdshader" id="1_1d3j5"]
 [ext_resource type="Script" uid="uid://pg3lrtcn3iuv" path="res://scripts/core/card.gd" id="1_c5vhu"]
@@ -7,6 +7,7 @@
 [ext_resource type="FontFile" uid="uid://bnd6fpxmrh3xk" path="res://assets/fonts/Oswald-Bold.ttf" id="4_2bh4c"]
 [ext_resource type="Texture2D" uid="uid://wgdsthw5el1o" path="res://assets/Card/Images/healSMALL.png" id="6_2bh4c"]
 [ext_resource type="FontFile" uid="uid://b6o8kshd0tc7a" path="res://assets/fonts/Oswald-SemiBold.ttf" id="7_t6tvt"]
+[ext_resource type="Texture2D" uid="uid://mvib84muc57m" path="res://assets/Card/Images/Cardback.png" id="8_t6tvt"]
 
 [sub_resource type="Resource" id="Resource_q7le6"]
 script = ExtResource("2_rrr6a")
@@ -90,6 +91,27 @@ cache/0/16/0/descent = 0.0
 cache/0/16/0/underline_position = 0.0
 cache/0/16/0/underline_thickness = 0.0
 cache/0/16/0/scale = 1.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pemn0"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_elkw6"]
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xg7vj"]
+shader = ExtResource("1_1d3j5")
+shader_parameter/base_color = Color(0.1, 0.1, 0.1, 1)
+shader_parameter/smoke_color = Color(0.4, 0.4, 0.4, 1)
+shader_parameter/speed = 0.05
+shader_parameter/density = 1.0
+shader_parameter/softness = 0.4730000224675
+shader_parameter/time_offset = 0.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_iuiyl"]
 size = Vector2(500, 700)
@@ -267,6 +289,33 @@ theme_override_fonts/font = SubResource("FontFile_utd6n")
 text = "Persistent Effect"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="CARDBACK" type="Panel" parent="."]
+visible = false
+material = SubResource("ShaderMaterial_pemn0")
+custom_minimum_size = Vector2(500, 700)
+layout_mode = 0
+offset_left = -250.0
+offset_top = -355.0
+offset_right = 250.0
+offset_bottom = 345.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_elkw6")
+
+[node name="Color" type="Panel" parent="CARDBACK"]
+material = SubResource("ShaderMaterial_xg7vj")
+custom_minimum_size = Vector2(490, 690)
+layout_mode = 0
+offset_left = 4.0
+offset_top = 6.0
+offset_right = 494.0
+offset_bottom = 696.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_elkw6")
+
+[node name="Cardback" type="Sprite2D" parent="CARDBACK/Color"]
+texture_filter = 1
+position = Vector2(246, 349)
+scale = Vector2(0.35477707, 0.35477707)
+texture = ExtResource("8_t6tvt")
 
 [node name="Area2D" type="Area2D" parent="."]
 

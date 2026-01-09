@@ -1,0 +1,27 @@
+[gd_scene load_steps=4 format=3 uid="uid://enfqkoapd1io"]
+
+[ext_resource type="Shader" uid="uid://cm6gbhyamkiad" path="res://scripts/shaders/dotted_border.gdshader" id="1_tsl2k"]
+[ext_resource type="Script" uid="uid://dc81cpmo2fowg" path="res://scripts/core/discard_pile.gd" id="2_tsl2k"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_u12k5"]
+shader = ExtResource("1_tsl2k")
+shader_parameter/border_width = 0.02000000060074
+shader_parameter/dot_spacing = 0.15
+shader_parameter/dot_length = 0.08
+shader_parameter/border_color = Color(1, 1, 1, 1)
+shader_parameter/bg_color = Color(0, 0, 0, 0)
+
+[node name="discard_pile" type="Panel"]
+material = SubResource("ShaderMaterial_u12k5")
+custom_minimum_size = Vector2(500, 700)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1.0
+offset_top = 508.0
+offset_right = -678.0
+offset_bottom = -1348.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = -1.5707964
+script = ExtResource("2_tsl2k")
