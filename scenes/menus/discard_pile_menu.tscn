@@ -1,0 +1,227 @@
+[gd_scene load_steps=6 format=3 uid="uid://ck1y54gh3ec2j"]
+
+[ext_resource type="PackedScene" uid="uid://dihmb4ffgxtbs" path="res://scenes/menus/card_menu_list_item.tscn" id="1_j0uxf"]
+[ext_resource type="FontFile" uid="uid://c561w64ckwf0d" path="res://assets/fonts/Oswald-Medium.ttf" id="2_e12pj"]
+[ext_resource type="Script" uid="uid://mc4il4u6aoxk" path="res://scripts/menus/discard_pile_menu.gd" id="3_1x2o1"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lw6qr"]
+bg_color = Color(0, 0, 0, 0.85)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_e12pj"]
+
+[node name="DiscardPile_Menu" type="Panel"]
+z_index = 200
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_lw6qr")
+script = ExtResource("3_1x2o1")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 0
+offset_left = -740.0
+offset_top = -1095.0
+offset_right = 441.0
+offset_bottom = 1450.0
+color = Color(0, 0, 0, 0.38039216)
+
+[node name="Menu" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -564.5
+offset_top = -980.0
+offset_right = 190.5
+offset_bottom = 1263.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Ownership" type="Label" parent="Menu"]
+custom_minimum_size = Vector2(755, 127)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_e12pj")
+theme_override_font_sizes/font_size = 85
+text = "_____ Discard Pile"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="CardMenuListItem" parent="Menu" instance=ExtResource("1_j0uxf")]
+custom_minimum_size = Vector2(752, 60)
+layout_mode = 2
+
+[node name="VSeparator" type="VSeparator" parent="Menu"]
+custom_minimum_size = Vector2(60, 40)
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_e12pj")
+
+[node name="CardMenuListItem2" parent="Menu" instance=ExtResource("1_j0uxf")]
+custom_minimum_size = Vector2(750, 60)
+layout_mode = 2
+
+[node name="VSeparator2" type="VSeparator" parent="Menu"]
+custom_minimum_size = Vector2(60, 40)
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_e12pj")
+
+[node name="CardMenuListItem3" parent="Menu" instance=ExtResource("1_j0uxf")]
+custom_minimum_size = Vector2(750, 60)
+layout_mode = 2
+
+[node name="VSeparator3" type="VSeparator" parent="Menu"]
+custom_minimum_size = Vector2(60, 40)
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_e12pj")
+
+[node name="CardMenuListItem4" parent="Menu" instance=ExtResource("1_j0uxf")]
+custom_minimum_size = Vector2(750, 60)
+layout_mode = 2
+
+[node name="VSeparator4" type="VSeparator" parent="Menu"]
+custom_minimum_size = Vector2(60, 40)
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_e12pj")
+
+[node name="CardMenuListItem5" parent="Menu" instance=ExtResource("1_j0uxf")]
+custom_minimum_size = Vector2(750, 60)
+layout_mode = 2
+
+[node name="VSeparator5" type="VSeparator" parent="Menu"]
+custom_minimum_size = Vector2(60, 40)
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_e12pj")
+
+[node name="CardMenuListItem6" parent="Menu" instance=ExtResource("1_j0uxf")]
+custom_minimum_size = Vector2(750, 60)
+layout_mode = 2
+
+[node name="VSeparator6" type="VSeparator" parent="Menu"]
+custom_minimum_size = Vector2(60, 40)
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_e12pj")
+
+[node name="CardMenuListItem7" parent="Menu" instance=ExtResource("1_j0uxf")]
+custom_minimum_size = Vector2(750, 60)
+layout_mode = 2
+
+[node name="VSeparator7" type="VSeparator" parent="Menu"]
+custom_minimum_size = Vector2(60, 40)
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_e12pj")
+
+[node name="CardMenuListItem8" parent="Menu" instance=ExtResource("1_j0uxf")]
+custom_minimum_size = Vector2(750, 60)
+layout_mode = 2
+
+[node name="VSeparator8" type="VSeparator" parent="Menu"]
+custom_minimum_size = Vector2(60, 40)
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_e12pj")
+
+[node name="CardMenuListItem9" parent="Menu" instance=ExtResource("1_j0uxf")]
+custom_minimum_size = Vector2(750, 60)
+layout_mode = 2
+
+[node name="VSeparator9" type="VSeparator" parent="Menu"]
+custom_minimum_size = Vector2(60, 40)
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_e12pj")
+
+[node name="CardMenuListItem10" parent="Menu" instance=ExtResource("1_j0uxf")]
+custom_minimum_size = Vector2(750, 60)
+layout_mode = 2
+
+[node name="VSeparator10" type="VSeparator" parent="Menu"]
+custom_minimum_size = Vector2(60, 40)
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_e12pj")
+
+[node name="CardMenuListItem11" parent="Menu" instance=ExtResource("1_j0uxf")]
+custom_minimum_size = Vector2(750, 60)
+layout_mode = 2
+
+[node name="VSeparator11" type="VSeparator" parent="Menu"]
+custom_minimum_size = Vector2(60, 40)
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_e12pj")
+
+[node name="CardMenuListItem12" parent="Menu" instance=ExtResource("1_j0uxf")]
+custom_minimum_size = Vector2(750, 60)
+layout_mode = 2
+
+[node name="VSeparator12" type="VSeparator" parent="Menu"]
+custom_minimum_size = Vector2(60, 40)
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_e12pj")
+
+[node name="CardMenuListItem13" parent="Menu" instance=ExtResource("1_j0uxf")]
+custom_minimum_size = Vector2(750, 60)
+layout_mode = 2
+
+[node name="VSeparator13" type="VSeparator" parent="Menu"]
+custom_minimum_size = Vector2(60, 40)
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_e12pj")
+
+[node name="CardMenuListItem14" parent="Menu" instance=ExtResource("1_j0uxf")]
+custom_minimum_size = Vector2(750, 60)
+layout_mode = 2
+
+[node name="VSeparator14" type="VSeparator" parent="Menu"]
+custom_minimum_size = Vector2(60, 40)
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_e12pj")
+
+[node name="CardMenuListItem15" parent="Menu" instance=ExtResource("1_j0uxf")]
+custom_minimum_size = Vector2(750, 60)
+layout_mode = 2
+
+[node name="VSeparator15" type="VSeparator" parent="Menu"]
+custom_minimum_size = Vector2(60, 40)
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_e12pj")
+
+[node name="CardMenuListItem16" parent="Menu" instance=ExtResource("1_j0uxf")]
+custom_minimum_size = Vector2(750, 60)
+layout_mode = 2
+
+[node name="VSeparator16" type="VSeparator" parent="Menu"]
+custom_minimum_size = Vector2(60, 40)
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_e12pj")
+
+[node name="CardMenuListItem17" parent="Menu" instance=ExtResource("1_j0uxf")]
+custom_minimum_size = Vector2(750, 60)
+layout_mode = 2
+
+[node name="VSeparator17" type="VSeparator" parent="Menu"]
+custom_minimum_size = Vector2(60, 40)
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_e12pj")
+
+[node name="CardMenuListItem18" parent="Menu" instance=ExtResource("1_j0uxf")]
+custom_minimum_size = Vector2(750, 60)
+layout_mode = 2
+
+[node name="VSeparator18" type="VSeparator" parent="Menu"]
+custom_minimum_size = Vector2(60, 40)
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_e12pj")
+
+[node name="CardMenuListItem19" parent="Menu" instance=ExtResource("1_j0uxf")]
+custom_minimum_size = Vector2(750, 60)
+layout_mode = 2
+
+[node name="VSeparator19" type="VSeparator" parent="Menu"]
+custom_minimum_size = Vector2(60, 40)
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_e12pj")
+
+[node name="CardMenuListItem20" parent="Menu" instance=ExtResource("1_j0uxf")]
+custom_minimum_size = Vector2(750, 60)
+layout_mode = 2

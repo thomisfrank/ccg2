@@ -1,0 +1,93 @@
+[gd_scene load_steps=6 format=3 uid="uid://c7rdo7fdpplnl"]
+
+[ext_resource type="Script" uid="uid://2xg76jccsqj1" path="res://scripts/core/annoucement.gd" id="1_jby4m"]
+[ext_resource type="FontFile" uid="uid://b6o8kshd0tc7a" path="res://assets/fonts/Oswald-SemiBold.ttf" id="2_0hqhb"]
+[ext_resource type="FontFile" uid="uid://c561w64ckwf0d" path="res://assets/fonts/Oswald-Medium.ttf" id="3_0hqhb"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wxxe6"]
+bg_color = Color(0, 0, 0, 0.60784316)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0hqhb"]
+
+[node name="annoucement" type="Panel"]
+clip_contents = true
+custom_minimum_size = Vector2(1179, 2556)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_wxxe6")
+script = ExtResource("1_jby4m")
+
+[node name="announce_text" type="Label" parent="."]
+visible = false
+custom_minimum_size = Vector2(1179, 2556)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("2_0hqhb")
+theme_override_font_sizes/font_size = 100
+text = "SAMPLE"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+autowrap_trim_flags = 64
+
+[node name="ResolutionPhase" type="Container" parent="."]
+visible = false
+custom_minimum_size = Vector2(1027, 1477)
+layout_mode = 0
+offset_left = 84.0
+offset_top = 598.0
+offset_right = 1111.0
+offset_bottom = 2075.0
+
+[node name="OppCard" type="ReferenceRect" parent="ResolutionPhase"]
+custom_minimum_size = Vector2(500, 700)
+layout_mode = 2
+border_width = 5.0
+
+[node name="PlayerCard" type="ReferenceRect" parent="ResolutionPhase"]
+custom_minimum_size = Vector2(500, 700)
+layout_mode = 2
+border_width = 5.0
+
+[node name="VERSUS" type="Label" parent="ResolutionPhase"]
+custom_minimum_size = Vector2(1027, 1477)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_0hqhb")
+theme_override_font_sizes/font_size = 100
+text = "VS"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ResolutionWinner" type="VBoxContainer" parent="."]
+visible = false
+custom_minimum_size = Vector2(1027, 1477)
+layout_mode = 0
+offset_left = 84.0
+offset_top = 598.0
+offset_right = 1111.0
+offset_bottom = 2075.0
+
+[node name="WinningCard" type="ReferenceRect" parent="ResolutionWinner"]
+custom_minimum_size = Vector2(500, 700)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+border_width = 5.0
+
+[node name="VSeparator" type="VSeparator" parent="ResolutionWinner"]
+custom_minimum_size = Vector2(4, 50)
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_0hqhb")
+
+[node name="Button" type="Button" parent="ResolutionWinner"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_0hqhb")
+theme_override_font_sizes/font_size = 54
+text = "Okay"

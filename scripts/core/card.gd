@@ -15,6 +15,7 @@ extends Control
 @onready var _effect_tag: Panel = $"DescriptionFrame/EffectTag"
 @onready var _effect_label: Label = $"DescriptionFrame/EffectTag/EffectLabel"
 @onready var _thumb_value_label: Label = $"THUMBvalue"
+@onready var _balance_icon_thumb: Sprite2D = get_node_or_null("THUMBvalue/BalanceIconTHUMB") as Sprite2D
 @onready var _cardback: Panel = get_node_or_null("CARDBACK") as Panel
 @onready var _area: Area2D = $"Area2D"
 @onready var _title_frame: Panel = $"Title_ValueFrame"
@@ -31,8 +32,6 @@ const BALANCE_ICON: Texture2D = preload("res://assets/Card/Icons/BalanceIcon.png
 @export var drag_enabled: bool = true
 @export var drag_glow_color: Color = Color(1.0, 0.78, 0.2, 1.0)
 @export var drag_glow_strength: float = 1.1
-@export var debug_play_delay: float = 0.35
-
 var _base_z_index: int = 0
 static var _hover_owner: Node = null
 var _hover_enabled: bool = true
@@ -43,7 +42,6 @@ var _drag_restore_z: int = 0
 var _is_in_play_area: bool = false
 
 @onready var _drag_glow: ColorRect = get_node_or_null("DragGlow") as ColorRect
-
 
 func _ready() -> void:
 	if _image_sprite == null:
@@ -100,6 +98,11 @@ func apply_definition(defn: CardDefinition) -> void:
 	var is_balance := defn.kind == CardDefinition.Kind.BALANCE
 	_balance_row.visible = is_balance
 	_standard_row.visible = not is_balance
+	
+	# Show BalanceIconTHUMB only for Balance cards
+	if _balance_icon_thumb != null:
+		_balance_icon_thumb.visible = is_balance
+		_balance_icon_thumb.texture = BALANCE_ICON
 
 	_apply_suit_colors(defn.suit)
 	_apply_effect_tag(defn.special_value)
@@ -135,6 +138,9 @@ func _apply_suit_colors(suit_value: String) -> void:
 	var thumb_color: Color = colors["b"]
 	thumb_color.a = 62.0 / 255.0
 	_thumb_value_label.add_theme_color_override("font_color", thumb_color)
+	# Apply same color to BalanceIconTHUMB
+	if _balance_icon_thumb != null:
+		_balance_icon_thumb.modulate = thumb_color
 
 
 func _get_value_text(defn: CardDefinition) -> String:
@@ -299,15 +305,13 @@ func _process(_delta: float) -> void:
 func _on_area_input(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
 	if not drag_enabled:
 		return
-	
-	# Handle mouse input
+
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed:
 			_start_drag()
 		else:
 			_end_drag()
-	
-	# Handle touch input
+
 	if event is InputEventScreenTouch:
 		if event.pressed:
 			_start_drag()
@@ -341,7 +345,6 @@ func _end_drag() -> void:
 			_apply_zoom_mode()
 		else:
 			_apply_thumbnail_mode()
-	print("DEBUG drop end: play_area=", play_area, " mouse=", get_global_mouse_position())
 	z_index = _drag_restore_z
 
 
@@ -371,55 +374,8 @@ func _get_play_area_under_mouse() -> Control:
 		if node is Control:
 			var rect := (node as Control).get_global_rect()
 			if rect.has_point(mouse_pos):
-				print("DEBUG hit play_area:", node.name, "rect=", rect, "mouse=", mouse_pos)
 				return node as Control
 	return null
-
-
-func _debug_queue_play() -> void:
-	await get_tree().create_timer(debug_play_delay).timeout
-	_debug_play_effect()
-
-
-func _debug_play_effect() -> void:
-	if definition == null:
-		return
-	var mgr = _get_effects_manager()
-	if mgr == null:
-		print("DEBUG effect: no effects manager found")
-		return
-	print("DEBUG effect: queue", definition.id, "kind=", definition.kind, "amount=", definition.amount)
-	var effect_data: Dictionary = {
-		"kind": definition.kind,
-		"amount": definition.amount,
-		"special_value": definition.special_value,
-		"duration_rounds": definition.duration_rounds,
-		"source_card": definition.id,
-		"target_is_opponent": _get_target_is_opponent(definition.kind),
-	}
-	mgr.queue_effect(effect_data)
-	mgr.resolve_next()
-	_reparent_to_hand_if_needed()
-
-
-func _get_effects_manager():
-	var mgr = get_tree().get_first_node_in_group("effects_manager")
-	if mgr != null:
-		return mgr
-	if get_tree().has_node("/root/EffectsManager"):
-		return get_tree().get_node("/root/EffectsManager")
-	return null
-
-
-func _get_target_is_opponent(kind = null) -> bool:
-	if has_meta("target_is_opponent"):
-		return bool(get_meta("target_is_opponent"))
-	if kind != null:
-		if typeof(kind) == TYPE_INT and kind == CardDefinition.Kind.HEAL:
-			return false
-		if typeof(kind) != TYPE_INT and str(kind).to_lower() == "heal":
-			return false
-	return true
 
 
 func _drop_to_play_area(area: Control) -> void:
@@ -434,10 +390,14 @@ func _drop_to_play_area(area: Control) -> void:
 	rotation = 0.0
 	_is_in_play_area = true
 	set_shadow_visible(false)
+	set_face_down(true)
 	_apply_zoom_mode()
-	_debug_queue_play()
+	_set_submit_visible(true)
 
 
-func _reparent_to_hand_if_needed() -> void:
-	# If we later want to snap back after debug play, we could implement here.
-	pass
+func _set_submit_visible(submit_visible: bool) -> void:
+	var submit_button := get_node_or_null("/root/main/SubmitButton") as Button
+	if submit_button == null:
+		return
+	submit_button.visible = submit_visible
+	submit_button.disabled = not submit_visible

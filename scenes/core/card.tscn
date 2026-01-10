@@ -253,6 +253,14 @@ theme_override_fonts/font = ExtResource("4_2bh4c")
 theme_override_font_sizes/font_size = 450
 text = "##"
 
+[node name="BalanceIconTHUMB" type="Sprite2D" parent="THUMBvalue"]
+visible = false
+modulate = Color(0.14901961, 0.105882354, 0, 0.24313726)
+texture_filter = 1
+position = Vector2(240.50002, 352.5)
+scale = Vector2(8.836734, 7.5531917)
+texture = ExtResource("2_c5vhu")
+
 [node name="imageSlot" type="ColorRect" parent="."]
 z_index = 2
 custom_minimum_size = Vector2(460, 460)

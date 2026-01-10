@@ -35,6 +35,13 @@ func has_space() -> bool:
 			return true
 	return false
 
+func get_card_count() -> int:
+	var count := 0
+	for card in _cards_in_slots:
+		if card != null:
+			count += 1
+	return count
+
 
 func add_card(card: Control) -> bool:
 	return _add_card_internal(card, Vector2.ZERO, false)
@@ -113,6 +120,10 @@ func _prepare_card_for_hand(card: Control) -> void:
 		card.set_hover_enabled(true)
 	if card.has_method("set_shadow_visible"):
 		card.set_shadow_visible(true)
+	if card.has_method("set"):
+		card.set("_is_in_play_area", false)
+	if card.has_method("_apply_thumbnail_mode"):
+		card._apply_thumbnail_mode()
 
 
 func _place_card_in_slot(card: Control, slot: ReferenceRect) -> void:

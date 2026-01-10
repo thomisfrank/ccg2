@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://bijishik3f1kn"]
+[gd_scene load_steps=12 format=3 uid="uid://os5hrv7m1ge7"]
 
 [ext_resource type="PackedScene" uid="uid://b7jqa3uqqpij7" path="res://scenes/core/healthBar.tscn" id="1_llaio"]
 [ext_resource type="PackedScene" uid="uid://rjpw42ljt74c" path="res://scenes/core/opp_health_bar.tscn" id="2_oekm8"]
@@ -6,14 +6,10 @@
 [ext_resource type="PackedScene" uid="uid://028ryjyjdcg3" path="res://scenes/core/hand.tscn" id="4_c390r"]
 [ext_resource type="PackedScene" uid="uid://d4k2fmxy8hgts" path="res://scenes/core/opp_hand.tscn" id="4_iba00"]
 [ext_resource type="PackedScene" uid="uid://bodw2xkfnn7gb" path="res://scenes/core/play_area.tscn" id="6_j7lav"]
-[ext_resource type="PackedScene" uid="uid://g4qws4tk7sn3" path="res://scenes/core/deck_counter.tscn" id="6_lkswk"]
 [ext_resource type="PackedScene" uid="uid://enfqkoapd1io" path="res://scenes/core/discard_pile.tscn" id="7_g38uy"]
 [ext_resource type="PackedScene" uid="uid://bio3822n605rm" path="res://scenes/core/turn_timer.tscn" id="8_5v64u"]
 [ext_resource type="FontFile" uid="uid://b6o8kshd0tc7a" path="res://assets/fonts/Oswald-SemiBold.ttf" id="9_8aysu"]
-[ext_resource type="Script" uid="uid://dx3x3lok7w870" path="res://scripts/game/main.gd" id="10_4y0hi"]
-[ext_resource type="PackedScene" uid="uid://c7rdo7fdpplnl" path="res://scenes/core/annoucement.tscn" id="11_valbs"]
-[ext_resource type="PackedScene" uid="uid://c5755ikt1dvgo" path="res://scenes/core/effect_tracking.tscn" id="12_mogw1"]
-[ext_resource type="PackedScene" uid="uid://ck1y54gh3ec2j" path="res://scenes/menus/discard_pile_menu.tscn" id="13_4c6dq"]
+[ext_resource type="Script" path="res://scripts/game/main.gd" id="10_4y0hi"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mkoeh"]
 bg_color = Color(0.3764706, 0.3764706, 0.3882353, 1)
@@ -24,8 +20,7 @@ corner_radius_bottom_left = 20
 
 [node name="main" type="Node2D"]
 script = ExtResource("10_4y0hi")
-metadata/_edit_vertical_guides_ = [26.0, 1157.0, 116.0, 1086.0, 1012.0]
-metadata/_edit_horizontal_guides_ = [1968.0]
+metadata/_edit_vertical_guides_ = [26.0, 1157.0, 116.0, 1086.0]
 
 [node name="HealthBar" parent="." instance=ExtResource("1_llaio")]
 offset_left = 26.0
@@ -61,34 +56,6 @@ offset_top = 1382.0
 offset_right = -108.0
 offset_bottom = 1382.0
 hand_path = NodePath("../hand")
-
-[node name="DeckCounter" parent="." instance=ExtResource("6_lkswk")]
-offset_left = 395.0
-offset_top = 1696.0
-offset_right = 395.0
-offset_bottom = 1696.0
-deck_path = NodePath("../deck")
-
-[node name="DiscardCounter" parent="." instance=ExtResource("6_lkswk")]
-offset_left = 755.0
-offset_top = 1691.0
-offset_right = 755.0
-offset_bottom = 1691.0
-discard_pile_path = NodePath("../discard_pile")
-
-[node name="OppDiscardCounter" parent="." instance=ExtResource("6_lkswk")]
-offset_left = 363.0
-offset_top = 730.0
-offset_right = 363.0
-offset_bottom = 730.0
-discard_pile_path = NodePath("../opp_discard_pile")
-
-[node name="OppDeckCounter" parent="." instance=ExtResource("6_lkswk")]
-offset_left = 722.0
-offset_top = 734.0
-offset_right = 722.0
-offset_bottom = 734.0
-deck_path = NodePath("../opp_deck")
 
 [node name="hand" parent="." instance=ExtResource("4_c390r")]
 offset_left = 114.0
@@ -146,47 +113,10 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_mkoeh")
 disabled = true
 text = "submit"
 
-[node name="annoucement" parent="." instance=ExtResource("11_valbs")]
-visible = false
-z_index = 50
-offset_right = 1179.0
-offset_bottom = 2556.0
-
-[node name="Effect_Trackers" type="VBoxContainer" parent="."]
-custom_minimum_size = Vector2(79, 284)
-offset_left = 1086.0
-offset_top = 1936.0
-offset_right = 1165.0
-offset_bottom = 2220.0
-
-[node name="Effect_Tracking" parent="Effect_Trackers" instance=ExtResource("12_mogw1")]
-layout_mode = 2
-
-[node name="Effect_Tracking2" parent="Effect_Trackers" instance=ExtResource("12_mogw1")]
-layout_mode = 2
-
-[node name="Effect_Tracking3" parent="Effect_Trackers" instance=ExtResource("12_mogw1")]
-layout_mode = 2
-
-[node name="Op_Effect_Trackers2" type="VBoxContainer" parent="."]
-custom_minimum_size = Vector2(79, 284)
-offset_left = 26.0
-offset_top = 323.0
-offset_right = 116.0
-offset_bottom = 607.0
-
-[node name="Effect_Tracking" parent="Op_Effect_Trackers2" instance=ExtResource("12_mogw1")]
-layout_mode = 2
-
-[node name="Effect_Tracking2" parent="Op_Effect_Trackers2" instance=ExtResource("12_mogw1")]
-layout_mode = 2
-
-[node name="Effect_Tracking3" parent="Op_Effect_Trackers2" instance=ExtResource("12_mogw1")]
-layout_mode = 2
-
-[node name="DiscardPile_Menu" parent="." instance=ExtResource("13_4c6dq")]
-visible = false
-offset_left = 738.0
-offset_top = 1104.0
-offset_right = 738.0
-offset_bottom = 1104.0
+[node name="DebugOppPlay" type="Button" parent="."]
+custom_minimum_size = Vector2(180, 60)
+offset_left = 24.0
+offset_top = 24.0
+offset_right = 204.0
+offset_bottom = 84.0
+text = "Opp Play Damage"

@@ -1,0 +1,32 @@
+[gd_scene load_steps=3 format=3 uid="uid://g4qws4tk7sn3"]
+
+[ext_resource type="Script" uid="uid://dv11opvgj8078" path="res://scripts/core/deck_counter.gd" id="1_spqbp"]
+[ext_resource type="FontFile" uid="uid://c561w64ckwf0d" path="res://assets/fonts/Oswald-Medium.ttf" id="2_eyo2s"]
+
+[node name="DeckCounter" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_spqbp")
+
+[node name="Panel" type="Panel" parent="."]
+custom_minimum_size = Vector2(72, 72)
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="number" type="Label" parent="Panel"]
+texture_filter = 1
+custom_minimum_size = Vector2(72, 72)
+layout_mode = 0
+offset_right = 50.0
+offset_bottom = 50.0
+theme_override_fonts/font = ExtResource("2_eyo2s")
+theme_override_font_sizes/font_size = 32
+text = "##"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 1

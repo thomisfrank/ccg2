@@ -1,0 +1,64 @@
+[gd_scene load_steps=8 format=3 uid="uid://dihmb4ffgxtbs"]
+
+[ext_resource type="Shader" uid="uid://p7x8psciedbc" path="res://scripts/shaders/smoky.gdshader" id="1_s2g7t"]
+[ext_resource type="Script" uid="uid://fasxnh8a5bq4" path="res://scripts/menus/card_menu_list_item.gd" id="1_wgq1x"]
+[ext_resource type="FontFile" uid="uid://bnd6fpxmrh3xk" path="res://assets/fonts/Oswald-Bold.ttf" id="2_wgq1x"]
+[ext_resource type="Texture2D" uid="uid://di7qqpsibcpsf" path="res://assets/Card/Images/healMED.png" id="3_c7pxv"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rrnhm"]
+shader = ExtResource("1_s2g7t")
+shader_parameter/base_color = Color(0.7372549, 0.5764706, 0, 1)
+shader_parameter/smoke_color = Color(0.14901961, 0.105882354, 0, 1)
+shader_parameter/speed = 0.142000006745
+shader_parameter/density = 0.9200000437
+shader_parameter/softness = 0.7750000368125
+shader_parameter/time_offset = 10.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5fskf"]
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_hufrr"]
+texture = ExtResource("3_c7pxv")
+
+[node name="CardMenuListItem" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -429.0
+offset_bottom = -2497.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_wgq1x")
+metadata/_edit_vertical_guides_ = [750.0, 63.0, 75.0]
+metadata/_edit_horizontal_guides_ = [61.0]
+
+[node name="BG" type="Panel" parent="."]
+material = SubResource("ShaderMaterial_rrnhm")
+custom_minimum_size = Vector2(688, 60)
+layout_mode = 0
+offset_left = 62.0
+offset_right = 750.0
+offset_bottom = 60.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_5fskf")
+
+[node name="Title" type="Label" parent="BG"]
+texture_filter = 2
+custom_minimum_size = Vector2(222, 30)
+layout_mode = 0
+offset_left = 13.0
+offset_right = 235.0
+offset_bottom = 60.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("2_wgq1x")
+theme_override_font_sizes/font_size = 40
+text = "Title"
+
+[node name="Card_Image" type="Panel" parent="."]
+layout_mode = 0
+offset_right = 52.0
+offset_bottom = 52.0
+theme_override_styles/panel = SubResource("StyleBoxTexture_hufrr")

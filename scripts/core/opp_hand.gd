@@ -30,6 +30,13 @@ func has_space() -> bool:
 			return true
 	return false
 
+func get_card_count() -> int:
+	var count := 0
+	for card in _cards_in_slots:
+		if card != null:
+			count += 1
+	return count
+
 
 func add_card(card: Control) -> bool:
 	var slot_index := _find_first_empty_slot()

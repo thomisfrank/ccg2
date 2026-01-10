@@ -1,5 +1,7 @@
 extends Control
 
+signal turn_timeout
+
 @export var turn_duration: float = 30.0
 @export var danger_threshold: float = 5.0
 @export var danger_color_a: Color = Color(0.9, 0.2, 0.2, 1.0)
@@ -44,6 +46,7 @@ func _process(_delta):
 func _on_turn_timer_timeout():
 	_update_timer_label(0.0)
 	_set_danger_state(true)
+	turn_timeout.emit()
 	handle_turn_timeout()
 
 func handle_turn_timeout():
